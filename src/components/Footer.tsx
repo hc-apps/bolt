@@ -1,127 +1,77 @@
-import React, { useState } from 'react';
-import { Terminal, Cloud, Heart } from 'lucide-react';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Heart, Code, Coffee } from 'lucide-react';
 
 interface FooterProps {
   darkMode: boolean;
 }
 
 const Footer: React.FC<FooterProps> = ({ darkMode }) => {
-  const [showTerminal, setShowTerminal] = useState(false);
-  const [terminalInput, setTerminalInput] = useState('');
-  const [terminalOutput, setTerminalOutput] = useState<string[]>([
-    'Welcome to Aarav\'s Terminal! Type "help" for available commands.'
-  ]);
-
-  const commands = {
-    help: () => 'Available commands: about, skills, projects, contact, clear, whoami',
-    about: () => 'Cloud & DevOps Engineer passionate about automation and scalable infrastructure.',
-    skills: () => 'AWS | Kubernetes | Terraform | Docker | Jenkins | Python | Linux',
-    projects: () => 'Check out my featured projects above! Each one solved real-world challenges.',
-    contact: () => 'Email: aarav.devops@gmail.com | LinkedIn: /in/aarav-patel-devops',
-    whoami: () => 'aarav@cloud:~$ building the future, one deployment at a time',
-    clear: () => 'CLEAR'
-  };
-
-  const handleTerminalSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const input = terminalInput.trim().toLowerCase();
-    
-    if (input) {
-      const newOutput = [...terminalOutput, `$ ${terminalInput}`];
-      
-      if (input === 'clear') {
-        setTerminalOutput(['Terminal cleared.']);
-      } else if (commands[input as keyof typeof commands]) {
-        const result = commands[input as keyof typeof commands]();
-        if (result === 'CLEAR') {
-          setTerminalOutput([]);
-        } else {
-          newOutput.push(result);
-          setTerminalOutput(newOutput);
-        }
-      } else {
-        newOutput.push(`Command '${input}' not found. Type 'help' for available commands.`);
-        setTerminalOutput(newOutput);
-      }
-    }
-    
-    setTerminalInput('');
-  };
-
   return (
     <footer className={`py-12 border-t ${
-      darkMode ? 'border-white/10 bg-navy' : 'border-gray-200 bg-white'
+      darkMode ? 'border-gray-800 bg-gray-900' : 'border-gray-200 bg-white'
     }`}>
       <div className="max-w-6xl mx-auto px-6">
-        <div className="text-center">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center"
+        >
           <div className="flex items-center justify-center space-x-2 mb-4">
             <span className={`text-sm ${
               darkMode ? 'text-gray-400' : 'text-gray-600'
             }`}>
               Built with
             </span>
-            <Heart size={16} className="text-red-500 animate-pulse" />
+            <motion.div
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              <Heart size={16} className="text-red-500" />
+            </motion.div>
             <span className={`text-sm ${
               darkMode ? 'text-gray-400' : 'text-gray-600'
             }`}>
-              & code by
+              and
             </span>
-            <span className="text-teal font-semibold">Aarav Patel</span>
+            <motion.div
+              animate={{ rotate: [0, 10, -10, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              <Code size={16} className="text-blue-500" />
+            </motion.div>
+            <span className={`text-sm ${
+              darkMode ? 'text-gray-400' : 'text-gray-600'
+            }`}>
+              by
+            </span>
+            <span className="text-blue-500 font-semibold">Aarav Patel</span>
           </div>
           
           <div className="flex items-center justify-center space-x-4 mb-6">
-            <button
-              onClick={() => setShowTerminal(!showTerminal)}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 ${
-                darkMode ? 'bg-white/10 hover:bg-white/20' : 'bg-gray-100 hover:bg-gray-200'
-              }`}
-            >
-              <Terminal size={16} className="text-teal" />
-              <span className="text-sm">Terminal</span>
-            </button>
-            
             <div className="flex items-center space-x-2">
-              <Cloud size={16} className="text-teal animate-float" />
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+              >
+                <Coffee size={16} className="text-amber-500" />
+              </motion.div>
               <span className={`text-xs ${
                 darkMode ? 'text-gray-500' : 'text-gray-400'
               }`}>
-                Deployed on AWS
+                Powered by coffee & cloud computing
               </span>
             </div>
           </div>
 
-          {showTerminal && (
-            <div className={`mx-auto max-w-2xl mb-6 p-4 rounded-lg font-mono text-sm ${
-              darkMode ? 'bg-black/50 text-green-400' : 'bg-gray-900 text-green-400'
-            }`}>
-              <div className="max-h-40 overflow-y-auto mb-3">
-                {terminalOutput.map((line, index) => (
-                  <div key={index} className="mb-1">
-                    {line}
-                  </div>
-                ))}
-              </div>
-              
-              <form onSubmit={handleTerminalSubmit} className="flex items-center">
-                <span className="mr-2">$</span>
-                <input
-                  type="text"
-                  value={terminalInput}
-                  onChange={(e) => setTerminalInput(e.target.value)}
-                  className="bg-transparent outline-none flex-1"
-                  placeholder="Type a command..."
-                  autoFocus
-                />
-              </form>
-            </div>
-          )}
-
           <p className={`text-sm ${
             darkMode ? 'text-gray-500' : 'text-gray-400'
           }`}>
-            © 2024 Aarav Patel. All rights reserved. | React + TypeScript + Tailwind CSS
+            © 2024 Aarav Patel. All rights reserved. | React + TypeScript + Tailwind CSS + Framer Motion
           </p>
-        </div>
+        </motion.div>
       </div>
     </footer>
   );
